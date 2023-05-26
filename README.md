@@ -7,3 +7,8 @@ The challenge lies in the absence of a comprehensive platform that addresses PCO
 
 Approach:
 The project's approach involves a user-friendly web platform equipped with essential features. It includes a workout room with a music system, exercise videos, and a timer to support individuals in managing their weight, hormones, and mental well-being. The platform also offers personalized diet recommendations and a virtual chatbot to address user queries. Additionally, an output window displays the progress report of users. The project aims to provide comprehensive and interactive solutions, enhancing the overall health of individuals with PCOD.
+
+Workflow diagram 
+
+![Project Work Flow Diagram(FGN)  MConverter eu](https://github.com/Aayushichan/G9-FeelGoodNow/assets/97275932/870c3bdd-6b9c-45d5-9d5f-748d9900e4c3)
+
