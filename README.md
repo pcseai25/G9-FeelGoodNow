@@ -10,5 +10,5 @@ The project's approach involves a user-friendly web platform equipped with essen
 
 Workflow diagram 
 
-![Project Work Flow Diagram(FGN)  MConverter eu](https://github.com/Aayushichan/G9-FeelGoodNow/assets/97275932/870c3bdd-6b9c-45d5-9d5f-748d9900e4c3)
 
+file:///E:/Project/Project%20Work%20Flow%20Diagram(FGN)%20[MConverter.eu].pdf
