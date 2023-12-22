@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search</title>
+</head>
+<body>
+    <h1>Search YouTube Videos</h1>
+
+    <form method="POST" action="{% url 'index' %}">
+        {% csrf_token %}
+        <input type="text" name="search" placeholder="Search YouTube Videos">
+        <button type="submit" name="submit" value="search">Search</button>
+        <button type="submit" name="submit" value="lucky">I'm Feeling Lucky</button>
+    </form>
+
+    <h2>Search Results</h2>
+
+    {% for video in videos %}
+        <div>
+            <a href="{{ video.url }}" target="_blank"><img src="{{ video.thumbnail }}"></a>
+            <p>Title: {{ video.title }}</p>
+            <p>Duration: {{ video.duration }} minutes</p>
+
+            {% if request.user.is_authenticated %}
+                {% if video in request.user.userprofile.favorites.all %}
+                    <form method="POST" action="{% url 'remove_favorite' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="video_id" value="{{ video.id }}">
+                        <button type="submit">Remove from Favorites</button>
+                    </form>
+                {% else %}
+                    <form method="POST" action="{% url 'add_to_favorites' video.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="video_id" value="{{ video.id }}">
+                        <button type="submit">Add to Favorites</button>
+                    </form>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <h2>Favorite Videos</h2>
+
+    {% if request.user.is_authenticated %}
+        {% if favorites %}
+            {% for video in favorites %}
+                <div>
+                    <a href="{{ video.url }}" target="_blank"><img src="{{ video.thumbnail }}"></a>
+                    <p>Title: {{ video.title }}</p>
+                    <p>Duration: {{ video.duration }} minutes</p>
+
+                    <form method="POST" action="{% url 'remove_favorite' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="video_id" value="{{ video.id }}">
+                        <button type="submit">Remove from Favorites</button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No favorite videos found.</p>
+        {% endif %}
+    {% else %}
+        <p>Please log in to view your favorite videos.</p>
+    {% endif %}
+</body>
+</html>

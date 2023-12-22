@@ -1,0 +1,15 @@
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="query" placeholder="Search...">
+    <button type="submit">Search</button>
+</form>
+{% if tracks %}
+    <ul>
+        {% for track in tracks %}
+            <li>
+                {{ track.name }} by {{ track.artists.0.name }}
+                <a href="{% url 'spotify:play' track.id %}">Play</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
