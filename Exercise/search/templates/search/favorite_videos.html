@@ -1,0 +1,122 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Favorite Videos</title>
+  
+  <!-- Bootstrap core CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <!-- Font Awesome CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  
+    body {
+      background-image: url("{% static 'search/youtube.jpg' %}");
+      background-repeat: repeat;
+      background-size: cover;
+    }
+
+    .jumbotron {
+      background: none;
+    }
+
+    .album {
+      background: none;
+    }
+  </style>
+  
+  <!-- Custom styles for this template -->
+  <link href="{% static 'search/album.css' %}" rel="stylesheet">
+</head>
+
+<body>
+  <main role="main">
+    <section class="jumbotron text-center">
+      <div class="container">
+        <h1 class="jumbotron-heading">Favorite Videos</h1>
+        <p class="lead text-muted">Your favorite videos are listed below:</p>
+      </div>
+    </section>
+
+    <div class="album py-5 bg-light">
+      <div class="container">
+        <div class="row">
+          {% for video in favorite_videos %}
+          <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+              <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="{% static video.thumbnail %}" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
+              <div class="card-body">
+                <p class="card-text">{{ video.title }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <a href="https://www.youtube.com/watch?v={{ video.id }}" class="btn btn-sm btn-outline-secondary" target="_blank">Watch</a>
+                    <a href="#" class="favorite-toggle btn btn-sm btn-outline-secondary" data-video-id="{{ video.id }}">
+                      <i class="fas fa-heart filled"></i>
+                    </a>
+                  </div>
+                  <small class="text-muted">{{ video.duration }} mins</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0r4G6+na4W46zgJ25RQa1EtgFXS+3/LCWe1N4nT9Znw2c4Vdj4E" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0i6qzZKa6z3kzynRpzxC0R2KfoXFrZqBg5toc7+szjBEqGf8E0NvzC2qc5g" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+  <!-- Font Awesome JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      $('.favorite-toggle').click(function(e) {
+        e.preventDefault();
+        var videoId = $(this).data('video-id');
+        var favoriteIcon = $(this).find('.fa-heart');
+
+        // Perform AJAX request to add/remove video from favorites
+        $.ajax({
+          type: 'POST',
+          url: '/toggle_favorite/',
+          data: {
+            'video_id': videoId,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          },
+          success: function(response) {
+            if (response.status === 'added') {
+              favoriteIcon.addClass('filled');
+            } else if (response.status === 'removed') {
+              favoriteIcon.removeClass('filled');
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
